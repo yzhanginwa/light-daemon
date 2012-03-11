@@ -1,0 +1,51 @@
+light-daemon is a ruby gem. It could help developers quickly build a daemon which prefok worker processes and monitor them.
+The usage is very simple:
+
+    #---------------------------------------------------------------------------------------------
+    class Client
+      def initialize
+      end
+    
+      def call
+        `echo "process: #{Process.pid}" >> /tmp/light-daemon.txt`
+        sleep 3
+        true
+      end
+    end
+    
+    LightDaemon::Daemon.start(Client.new, :children=> 2, :pid_file => "/tmp/light-daemon.pid" )
+    #---------------------------------------------------------------------------------------------
+
+What you need to do is:
+1. Create your worker class. Define a method "call" and put the real work into it. 
+2. The method "call" needs to return true for the daemon to continuously call it.
+3. You need to tell the daemon how many worker processes you want and a filename for daemon to store
+   the PID of the daemon process.
+4. If the method "call" returns false, the daemon will kill this work process and create a new one. 
+   This would be very helpful if your code might have memory leaking and you want it to restart after 
+   certain criteria is met. An example is as following:
+
+    #---------------------------------------------------------------------------------------------
+    class Client
+      def initialize
+        @count = 0
+      end
+    
+      def call
+        `echo "process: #{Process.pid}" >> /tmp/light-daemon.txt`
+        sleep 3
+        @count +=1
+        (@count < 100)? true : false
+      end
+    end
+    
+    LightDaemon::Daemon.start(Client.new, :children=> 2, :pid_file => "/tmp/light-daemon.pid" )
+    #---------------------------------------------------------------------------------------------
+
+
+
+
+Yi Zhang
+yzhang[dot]wa[at]gmail[dot]com
+3/11/2012
+
