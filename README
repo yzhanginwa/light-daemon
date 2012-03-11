@@ -2,6 +2,9 @@ light-daemon is a ruby gem. It could help developers quickly build a daemon whic
 The usage is very simple:
 
     #---------------------------------------------------------------------------------------------
+    require 'rubygems'
+    require 'light_daemon'
+
     class Client
       def initialize
       end
@@ -26,6 +29,9 @@ What you need to do is:
    certain criteria is met. An example is as following:
 
     #---------------------------------------------------------------------------------------------
+    require 'rubygems'
+    require 'light_daemon'
+
     class Client
       def initialize
         @count = 0
