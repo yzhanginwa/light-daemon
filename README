@@ -1,7 +1,8 @@
-light-daemon is a ruby gem. It could help developers quickly build a daemon which prefok worker processes and monitor them.
+Light-daemon is a ruby gem. It could help developers quickly build a daemon which prefork worker processes and monitor them.
+
 The usage is very simple:
 
-    #---------------------------------------------------------------------------------------------
+    #------------------------------------------------------------------------------
     require 'rubygems'
     require 'light_daemon'
 
@@ -16,19 +17,17 @@ The usage is very simple:
       end
     end
     
-    LightDaemon::Daemon.start(Client.new, :children=> 2, :pid_file => "/tmp/light-daemon.pid" )
-    #---------------------------------------------------------------------------------------------
+    LightDaemon::Daemon.start(Client.new, :children=> 2, :pid_file => "/tmp/light-daemon.pid")
+    #------------------------------------------------------------------------------
 
 What you need to do is:
+
 1. Create your worker class. Define a method "call" and put the real work into it. 
 2. The method "call" needs to return true for the daemon to continuously call it.
-3. You need to tell the daemon how many worker processes you want and a filename for daemon to store
-   the PID of the daemon process.
-4. If the method "call" returns false, the daemon will kill this work process and create a new one. 
-   This would be very helpful if your code might have memory leaking and you want it to restart after 
-   certain criteria is met. An example is as following:
+3. You need to tell the daemon how many worker processes you want and a filename for daemon to store the PID of the daemon process.
+4. If the method "call" returns false, the daemon will kill this worker process and create a new one. This would be very helpful if your code might have memory leaking and you want it to restart after certain criteria is met. An example is as following:
 
-    #---------------------------------------------------------------------------------------------
+    #------------------------------------------------------------------------------
     require 'rubygems'
     require 'light_daemon'
 
@@ -46,12 +45,10 @@ What you need to do is:
     end
     
     LightDaemon::Daemon.start(Client.new, :children=> 2, :pid_file => "/tmp/light-daemon.pid" )
-    #---------------------------------------------------------------------------------------------
-
+    #------------------------------------------------------------------------------
 
 
 
 Yi Zhang
 yzhang[dot]wa[at]gmail[dot]com
 3/11/2012
-
