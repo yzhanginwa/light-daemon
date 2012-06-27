@@ -5,7 +5,7 @@ module LightDaemon
     class << self
       def start(obj, options={})
         @options = self.make_options(options)
-	@pid_file = @options[:pid_file]
+        @pid_file = @options[:pid_file]
         if self.get_pid
           raise "The pid file \"#{@pid_file}\" existed already. You need to stop the daemon first."
         end
@@ -15,21 +15,21 @@ module LightDaemon
       def stop(pid_file=DEFAULT_PID_FILE)
         @pid_file = pid_file
         if(pid = self.get_pid)
-	  begin
-	    Process.kill("TERM", pid)
-	  rescue Errno::ESRCH   
-	    # no such process. do nothing
+          begin
+            Process.kill("TERM", pid)
+          rescue Errno::ESRCH   
+            # no such process. do nothing
           end
-	  self.clear_pid
+          self.clear_pid
         end
       end
 
       def get_pid
         return nil unless File.exist?(@pid_file)
-	begin 
-	  File.open(@pid_file) {|f| f.read}.to_i
+        begin 
+          File.open(@pid_file) {|f| f.read}.to_i
         rescue
-	  nil
+          nil
         end
       end
 
@@ -45,7 +45,7 @@ module LightDaemon
         options[:children] ||= 1
         options[:monitor_cycle] ||= 10    # seconds
         options[:pid_file] ||= DEFAULT_PID_FILE
-	options
+        options
       end
 
       # for debugging 
@@ -74,19 +74,19 @@ module LightDaemon
           @processes.each do |pid|
             Process.kill("TERM", pid)
           end
-  	  
+
           sleep(3)
           options[:children].times do 
-    	    @processes.size.times do
-      	      pid = @processes.shift
-      	      if process_alive?(pid)
-      	        @processes << pid
-      	        sleep(3)
+            @processes.size.times do
+              pid = @processes.shift
+              if process_alive?(pid)
+                @processes << pid
+                sleep(3)
               end
-    	    end  
+            end  
           end
-  	  @processes.each do |pid|
-  	    Process.kill(9, pid)
+          @processes.each do |pid|
+            Process.kill(9, pid)
           end
         end
         $keep_running = false
@@ -110,35 +110,35 @@ module LightDaemon
       @options[:children].times do 
         if pid = fork 
           @processes << pid
-	  Process.detach(pid)
+          Process.detach(pid)
         else
-	  set_child
+          set_child
           while($keep_running)
-	    break unless @obj.send(:call)
-	  end
-	  return
-        end	
+            break unless @obj.send(:call)
+          end
+          return
+        end
       end
 
       while($keep_running)
         sleep(@options[:monitor_cycle])
 
-	@processes.each_with_index do |pid, index|
+        @processes.each_with_index do |pid, index|
           unless process_alive?(pid)
             if pid = fork
-	      @processes[index] = pid
-	      Process.detach(pid)
-	      sleep(2)
-	    else 
-	      set_child 
+              @processes[index] = pid
+              Process.detach(pid)
+              sleep(2)
+            else 
+              set_child 
               while($keep_running)
-	        break unless @obj.send(:call)
-	      end
+                break unless @obj.send(:call)
+              end
               return
-	    end  
+            end  
           else
           end
-	  sleep(1)
+          sleep(1)
         end
       end
       self.class.clear_pid(@options[:pid_file])
@@ -148,7 +148,7 @@ module LightDaemon
     def daemonize
       fork && exit
       unless Process.setsid
-	raise 'cannot detach from controlling terminal'
+        raise 'cannot detach from controlling terminal'
       end
 
       trap 'SIGHUP', 'IGNORE'
