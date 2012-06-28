@@ -113,8 +113,9 @@ module LightDaemon
           Process.detach(pid)
         else
           set_child
+          target_obj = (@obj.class.name == 'String')? Object.const_get(@obj).new : @obj
           while($keep_running)
-            break unless @obj.send(:call)
+            break unless target_obj.send(:call)
           end
           return
         end
