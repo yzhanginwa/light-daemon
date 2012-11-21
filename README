@@ -1,4 +1,4 @@
-Light-daemon is a ruby gem. It could help developers quickly build a daemon which prefork worker processes and monitor them.
+Light-daemon is a ruby gem. It could help developers quickly build a daemon which preforks worker processes and monitors them.
 
 The usage is very simple:
 

@@ -112,11 +112,7 @@ module LightDaemon
           @processes << pid
           Process.detach(pid)
         else
-          set_child
-          target_obj = (@obj.class.name == 'String')? Object.const_get(@obj).new : @obj
-          while($keep_running)
-            break unless target_obj.send(:call)
-          end
+          run_child
           return
         end
       end
@@ -131,10 +127,7 @@ module LightDaemon
               Process.detach(pid)
               sleep(2)
             else 
-              set_child 
-              while($keep_running)
-                break unless @obj.send(:call)
-              end
+              run_child
               return
             end  
           else
@@ -161,8 +154,12 @@ module LightDaemon
       STDERR.sync = true
     end
 
-    def set_child 
+    def run_child
       @is_child = true
+      target_obj = (@obj.class.name == 'String')? Object.const_get(@obj).new : @obj
+      while($keep_running)
+        break unless target_obj.send(:call)
+      end
     end
   end
 end
