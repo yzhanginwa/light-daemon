@@ -1,8 +1,15 @@
+= Light Daemon
+
 Light-daemon is a ruby gem. It could help developers quickly build a daemon which preforks worker processes and monitors them.
+
+== Install
+
+  gem install light-daemon
+
+== Usage
 
 The usage is very simple:
 
-    #------------------------------------------------------------------------------
     require 'rubygems'
     require 'light_daemon'
 
@@ -18,7 +25,6 @@ The usage is very simple:
     end
     
     LightDaemon::Daemon.start(Client.new, :children=> 2, :pid_file => "/tmp/light-daemon.pid")
-    #------------------------------------------------------------------------------
 
 What you need to do is:
 
@@ -27,7 +33,6 @@ What you need to do is:
 3. You need to tell the daemon how many worker processes you want and a filename for daemon to store the PID of the daemon process.
 4. If the method "call" returns false, the daemon will kill this worker process and create a new one. This would be very helpful if your code might have memory leaking and you want it to restart after certain criteria is met. An example is as following:
 
-    #------------------------------------------------------------------------------
     require 'rubygems'
     require 'light_daemon'
 
@@ -45,10 +50,8 @@ What you need to do is:
     end
     
     LightDaemon::Daemon.start(Client.new, :children=> 2, :pid_file => "/tmp/light-daemon.pid" )
-    #------------------------------------------------------------------------------
 
+== License
 
+Copyright (c) 2012 [Yi Zhang], released under the MIT license
 
-Yi Zhang
-yzhang[dot]wa[at]gmail[dot]com
-3/11/2012
